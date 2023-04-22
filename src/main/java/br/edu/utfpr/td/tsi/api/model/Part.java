@@ -1,4 +1,4 @@
-package br.edu.utfpr.td.tsi.application.model;
+package br.edu.utfpr.td.tsi.api.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

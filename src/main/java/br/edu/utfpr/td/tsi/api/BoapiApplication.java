@@ -1,4 +1,4 @@
-package br.edu.utfpr.td.tsi.application;
+package br.edu.utfpr.td.tsi.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

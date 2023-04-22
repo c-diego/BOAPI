@@ -1,7 +1,7 @@
-package br.edu.utfpr.td.tsi.application.controller;
+package br.edu.utfpr.td.tsi.api.controller;
 
-import br.edu.utfpr.td.tsi.application.model.Vehicle;
-import br.edu.utfpr.td.tsi.application.repository.IVehicleRepository;
+import br.edu.utfpr.td.tsi.api.model.Vehicle;
+import br.edu.utfpr.td.tsi.api.repository.IVehicleRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

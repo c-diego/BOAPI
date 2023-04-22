@@ -1,6 +1,6 @@
-package br.edu.utfpr.td.tsi.application.repository;
+package br.edu.utfpr.td.tsi.api.repository;
 
-import br.edu.utfpr.td.tsi.application.model.Vehicle;
+import br.edu.utfpr.td.tsi.api.model.Vehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

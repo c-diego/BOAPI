@@ -1,5 +1,6 @@
 package br.edu.utfpr.td.tsi.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,11 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -23,8 +19,8 @@ public class VehicleTheftReport {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String identification;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar dateOfOccurrence;
+    @Column(nullable = false)
+    private String dateOfOccurrence;
 
     @Column(nullable = false)
     private String timeOfDay;
@@ -32,12 +28,10 @@ public class VehicleTheftReport {
     @ManyToOne
     private Address location;
 
+    @JsonIgnoreProperties("theftReports")
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
     private Vehicle vehicle;
-
-    @OneToMany(mappedBy = "theftReport", orphanRemoval = true)
-    private List<Part> involvedParts;
 
     public String getIdentification() {
         return identification;
@@ -47,11 +41,11 @@ public class VehicleTheftReport {
         this.identification = identification;
     }
 
-    public Calendar getDateOfOccurrence() {
+    public String getDateOfOccurrence() {
         return dateOfOccurrence;
     }
 
-    public void setDateOfOccurrence(Calendar dateOfOccurrence) {
+    public void setDateOfOccurrence(String dateOfOccurrence) {
         this.dateOfOccurrence = dateOfOccurrence;
     }
 
@@ -77,14 +71,6 @@ public class VehicleTheftReport {
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
-    }
-
-    public List<Part> getInvolvedParts() {
-        return involvedParts;
-    }
-
-    public void setInvolvedParts(List<Part> involvedParts) {
-        this.involvedParts = involvedParts;
     }
 
     @Override

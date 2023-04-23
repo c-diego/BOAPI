@@ -1,5 +1,6 @@
 package br.edu.utfpr.td.tsi.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
 public class Vehicle {
 
     @Id
@@ -37,6 +39,7 @@ public class Vehicle {
     private VehicleRegistration registration;
 
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("vehicle")
     private List<VehicleTheftReport> theftReports;
 
     public Long getId() {

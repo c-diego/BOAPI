@@ -1,5 +1,6 @@
 package br.edu.utfpr.td.tsi.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,20 +19,21 @@ public class Address {
 
     @Column(nullable = false)
     private String street;
-    
+
     @Column(nullable = false)
     private int number;
-    
+
     @Column(nullable = false)
     private String neighborhood;
-    
+
     @Column(nullable = false)
     private String city;
-    
+
     @Column(nullable = false)
     private String state;
 
     @OneToMany(mappedBy = "location", orphanRemoval = true)
+    @JsonIgnore
     private List<VehicleTheftReport> theftReports;
 
     public Long getId() {
@@ -111,6 +113,5 @@ public class Address {
         final Address other = (Address) obj;
         return Objects.equals(this.id, other.id);
     }
-    
-}
 
+}

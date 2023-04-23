@@ -19,16 +19,16 @@ public class Vehicle {
     private Long id;
 
     @Column(nullable = false)
-    private int yearOfManufacture;
+    private int yearManufacture;
 
     @Column(nullable = false)
     private String color;
 
     @Column(nullable = false)
-    private String brand;
+    private String make;
 
     @Column(nullable = false)
-    private String typeVehicle;
+    private String type;
 
     @Column(nullable = false)
     private String model;
@@ -47,12 +47,12 @@ public class Vehicle {
         this.id = id;
     }
 
-    public int getYearOfManufacture() {
-        return yearOfManufacture;
+    public int getYearManufacture() {
+        return yearManufacture;
     }
 
-    public void setYearOfManufacture(int yearOfManufacture) {
-        this.yearOfManufacture = yearOfManufacture;
+    public void setYearManufacture(int yearManufacture) {
+        this.yearManufacture = yearManufacture;
     }
 
     public String getColor() {
@@ -63,20 +63,20 @@ public class Vehicle {
         this.color = color;
     }
 
-    public String getBrand() {
-        return brand;
+    public String getMake() {
+        return make;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setMake(String make) {
+        this.make = make;
     }
 
-    public String getTypeVehicle() {
-        return typeVehicle;
+    public String getType() {
+        return type;
     }
 
-    public void setTypeVehicle(String typeVehicle) {
-        this.typeVehicle = typeVehicle;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getModel() {
@@ -123,10 +123,5 @@ public class Vehicle {
         }
         final Vehicle other = (Vehicle) obj;
         return Objects.equals(this.id, other.id);
-    }
-
-    @Override
-    public String toString() {
-        return "Vehicle{" + "id=" + id + ", yearOfManufacture=" + yearOfManufacture + ", color=" + color + ", brand=" + brand + ", typeVehicle=" + typeVehicle + ", model=" + model + ", vehicleRegistration=" + registration + ", theftReports=" + theftReports + '}';
     }
 }

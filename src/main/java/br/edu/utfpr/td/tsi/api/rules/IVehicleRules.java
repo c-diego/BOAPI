@@ -1,26 +1,17 @@
 package br.edu.utfpr.td.tsi.api.rules;
 
+import br.edu.utfpr.td.tsi.api.exception.NoDataFoundException;
+import br.edu.utfpr.td.tsi.api.exception.VehicleNotFoundException;
 import br.edu.utfpr.td.tsi.api.model.Vehicle;
 import java.util.List;
+import java.util.Map;
 
 public interface IVehicleRules {
 
-    List<Vehicle> showAllVehicles();
+    List<Vehicle> showAllVehicles() throws NoDataFoundException;
 
-    Vehicle findVehicleByLicensePlate(final String licensePlate);
+    Vehicle findVehicleByLicensePlate(final String licensePlate) throws VehicleNotFoundException;
 
-    List<Vehicle> findVehicleByColor(final String color);
-
-    List<Vehicle> findVehicleByType(final String type);
-    
-    List<String> validate(Vehicle vehicle);
-    
-    List<String> save(Vehicle vehicle);
-    
-    boolean delete(Long id);
-    
-    Vehicle update(Long id, Vehicle vehicle);
-    
-    Vehicle findById(Long id);
+    List<Vehicle> findVehicleByAttributes(final Map<String, String> params) throws NoDataFoundException;
 
 }

@@ -2,10 +2,10 @@ package br.edu.utfpr.td.tsi.api.rules;
 
 import br.edu.utfpr.td.tsi.api.exception.InvalidDataException;
 import br.edu.utfpr.td.tsi.api.exception.NoDataFoundException;
-import br.edu.utfpr.td.tsi.api.exception.TheftReportNotFoundException;
-import br.edu.utfpr.td.tsi.api.model.Vehicle;
-import br.edu.utfpr.td.tsi.api.model.Registration;
+import br.edu.utfpr.td.tsi.api.model.Address;
 import br.edu.utfpr.td.tsi.api.model.TheftReport;
+import br.edu.utfpr.td.tsi.api.model.Vehicle;
+import br.edu.utfpr.td.tsi.api.repository.IAddressRepository;
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +13,21 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import br.edu.utfpr.td.tsi.api.repository.ITheftReportRepository;
+import br.edu.utfpr.td.tsi.api.repository.IVehicleRepository;
 import br.edu.utfpr.td.tsi.api.rules.validation.ValidateInputData;
+import jakarta.persistence.EntityNotFoundException;
 
 @Component
 public class TheftReportRules implements ITheftReportRules {
 
     @Autowired
     private ITheftReportRepository theftReportRepository;
+
+    @Autowired
+    private IVehicleRepository vehicleRepository;
+
+    @Autowired
+    private IAddressRepository addressRepository;
 
     @Autowired
     private EntityManager entityManager;
@@ -36,12 +44,12 @@ public class TheftReportRules implements ITheftReportRules {
     }
 
     @Override
-    public TheftReport findTheftReportByIdentification(String identification) throws TheftReportNotFoundException {
+    public TheftReport findTheftReportByIdentification(String identification) throws EntityNotFoundException {
 
         TheftReport theftReport = theftReportRepository.findByIdentification(identification);
 
         if (theftReport == null) {
-            throw new TheftReportNotFoundException("Theft report not found");
+            throw new EntityNotFoundException("Theft report not found");
         }
 
         return theftReport;
@@ -49,27 +57,63 @@ public class TheftReportRules implements ITheftReportRules {
     }
 
     @Override
-    public List<TheftReport> findTheftReportsByAttributes(Map<String, String> params) throws NoDataFoundException {
+    public List<TheftReport> findTheftReportsByAttributes(Map<String, String> params)
+            throws NoDataFoundException {
+
         return new ArrayList<>();
     }
 
     @Override
     public void addReport(TheftReport report) throws InvalidDataException {
-        
+
         ValidateInputData.validateTheftReport(report);
+
+        Long vehicleId = report.getVehicle().getId();
         
-
-        if (report.getVehicle().getId() != null) {
-            Vehicle vehicle = entityManager.find(Vehicle.class, report.getVehicle().getId());
-            Registration registration = entityManager.find(Registration.class, report.getVehicle().getRegistration().getId());
-            //Address location = entityManager.find(Address.class, report.getLocation().getId());
-
-            vehicle.setRegistration(registration);
-            report.setVehicle(vehicle);
-           // report.setLocation(location);
+        if (vehicleId != null) {
+            addReportWithExistingVehicle(report.getVehicle().getId(), report);
+        } else {
+            verifyLicensePlate(report.getVehicle().getRegistration().getLicensePlate());
+        }
+        
+        Long addressId = report.getAddress().getIdentification();
+        
+        if (addressId != null) {
+            addReportWithExistingAddress(addressId, report);
         }
 
         theftReportRepository.save(report);
+    }
+
+    private void addReportWithExistingVehicle(Long id, TheftReport report) {
+
+        Vehicle vehicle = vehicleRepository.findById(id).orElse(null);
+
+        if (vehicle == null) {
+            throw new EntityNotFoundException("Vehicle not found");
+        }
+
+        report.setVehicle(vehicle);
+    }
+
+    private void addReportWithExistingAddress(Long id, TheftReport report) {
+
+        Address address = addressRepository.findById(id).orElse(null);
+
+        if (address == null) {
+            throw new EntityNotFoundException("Address not found");
+        }
+        report.setAddress(address);
+
+    }
+    
+    private void verifyLicensePlate(String licensePlate) {
+        
+        Vehicle vehicle = vehicleRepository.findByRegistrationLicensePlate(licensePlate);
+        
+        if (vehicle != null) {
+            throw new RuntimeException("License plate is already registered");
+        }
     }
 
 }

@@ -15,7 +15,7 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long identification;
 
     @Column(nullable = false)
     private String street;
@@ -36,12 +36,12 @@ public class Address {
     @JsonIgnore
     private List<TheftReport> theftReports;
 
-    public Long getId() {
-        return id;
+    public Long getIdentification() {
+        return identification;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdentification(Long identification) {
+        this.identification = identification;
     }
 
     public String getStreet() {
@@ -95,7 +95,7 @@ public class Address {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 97 * hash + Objects.hashCode(this.identification);
         return hash;
     }
 
@@ -111,7 +111,7 @@ public class Address {
             return false;
         }
         final Address other = (Address) obj;
-        return Objects.equals(this.id, other.id);
+        return Objects.equals(this.identification, other.identification);
     }
 
 }

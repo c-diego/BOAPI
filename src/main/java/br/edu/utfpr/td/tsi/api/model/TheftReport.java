@@ -25,7 +25,7 @@ public class TheftReport {
     @Column(nullable = false)
     private String period;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Address address;
 
     @JsonIgnoreProperties("theftReports")

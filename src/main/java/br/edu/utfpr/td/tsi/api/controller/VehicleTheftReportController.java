@@ -1,8 +1,6 @@
 package br.edu.utfpr.td.tsi.api.controller;
 
-import br.edu.utfpr.td.tsi.api.exception.InvalidDataException;
 import br.edu.utfpr.td.tsi.api.exception.NoDataFoundException;
-import br.edu.utfpr.td.tsi.api.exception.TheftReportNotFoundException;
 import br.edu.utfpr.td.tsi.api.model.TheftReport;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.edu.utfpr.td.tsi.api.rules.ITheftReportRules;
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping(path = "/theftReports", produces = "application/json")
@@ -44,7 +43,7 @@ public class VehicleTheftReportController {
         try {
             TheftReport report = theftReportRules.findTheftReportByIdentification(identification);
             return ResponseEntity.ok(report);
-        } catch (TheftReportNotFoundException ex) {
+        } catch (EntityNotFoundException ex) {
 
             return ResponseEntity.noContent().build();
         }
@@ -56,7 +55,7 @@ public class VehicleTheftReportController {
         try {
             theftReportRules.addReport(report);
             return ResponseEntity.status(HttpStatus.CREATED).body(report);
-        } catch (InvalidDataException ex) {
+        } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }

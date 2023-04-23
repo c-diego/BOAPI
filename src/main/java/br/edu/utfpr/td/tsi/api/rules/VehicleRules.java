@@ -1,9 +1,9 @@
 package br.edu.utfpr.td.tsi.api.rules;
 
 import br.edu.utfpr.td.tsi.api.exception.NoDataFoundException;
-import br.edu.utfpr.td.tsi.api.exception.VehicleNotFoundException;
 import br.edu.utfpr.td.tsi.api.model.Vehicle;
 import br.edu.utfpr.td.tsi.api.repository.IVehicleRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +29,11 @@ public class VehicleRules implements IVehicleRules {
     }
 
     @Override
-    public Vehicle findVehicleByLicensePlate(String licensePlate) throws VehicleNotFoundException {
+    public Vehicle findVehicleByLicensePlate(String licensePlate) throws EntityNotFoundException {
         Vehicle vehicle = vehicleRepository.findByRegistrationLicensePlate(licensePlate);
 
         if (vehicle == null) {
-            throw new VehicleNotFoundException("Vehicle not found");
+            throw new EntityNotFoundException("Vehicle not found");
         }
 
         return vehicle;

@@ -20,16 +20,12 @@ import java.util.Objects;
 public class VehicleTheftReport {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private String identification;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar dateOfOccurrence;
-    
+
     @Column(nullable = false)
     private String timeOfDay;
 
@@ -42,14 +38,6 @@ public class VehicleTheftReport {
 
     @OneToMany(mappedBy = "theftReport", orphanRemoval = true)
     private List<Part> involvedParts;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getIdentification() {
         return identification;
@@ -102,7 +90,7 @@ public class VehicleTheftReport {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 83 * hash + Objects.hashCode(this.identification);
         return hash;
     }
 
@@ -118,7 +106,7 @@ public class VehicleTheftReport {
             return false;
         }
         final VehicleTheftReport other = (VehicleTheftReport) obj;
-        return Objects.equals(this.id, other.id);
+        return Objects.equals(this.identification, other.identification);
     }
 
 }

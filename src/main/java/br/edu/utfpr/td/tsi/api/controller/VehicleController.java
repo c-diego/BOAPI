@@ -35,7 +35,7 @@ public class VehicleController {
     }
 
     @GetMapping("/{licensePlate}")
-    public ResponseEntity<Vehicle> findById(@PathVariable String licensePlate) {
+    public ResponseEntity<Vehicle> findByLicensePlate(@PathVariable String licensePlate) {
 
         try {
             Vehicle vehicle = vehicleRules.findVehicleByLicensePlate(licensePlate);

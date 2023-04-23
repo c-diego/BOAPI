@@ -11,7 +11,7 @@ import jakarta.persistence.OneToOne;
 import java.util.Objects;
 
 @Entity
-public class VehicleRegistration {
+public class Registration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,7 +88,7 @@ public class VehicleRegistration {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final VehicleRegistration other = (VehicleRegistration) obj;
+        final Registration other = (Registration) obj;
         return Objects.equals(this.licensePlate, other.licensePlate);
     }
 

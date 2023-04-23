@@ -2,9 +2,8 @@ package br.edu.utfpr.td.tsi.api.controller;
 
 import br.edu.utfpr.td.tsi.api.exception.InvalidDataException;
 import br.edu.utfpr.td.tsi.api.exception.NoDataFoundException;
-import br.edu.utfpr.td.tsi.api.exception.VehicleTheftReportNotFoundException;
-import br.edu.utfpr.td.tsi.api.model.VehicleTheftReport;
-import br.edu.utfpr.td.tsi.api.rules.IVehicleTheftReportRules;
+import br.edu.utfpr.td.tsi.api.exception.TheftReportNotFoundException;
+import br.edu.utfpr.td.tsi.api.model.TheftReport;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,19 +16,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import br.edu.utfpr.td.tsi.api.rules.ITheftReportRules;
 
 @RestController
 @RequestMapping(path = "/theftReports", produces = "application/json")
 public class VehicleTheftReportController {
 
     @Autowired
-    private IVehicleTheftReportRules vehicleTheftReportRules;
+    private ITheftReportRules theftReportRules;
 
     @GetMapping
-    public ResponseEntity<List<VehicleTheftReport>> findAll() {
+    public ResponseEntity<List<TheftReport>> findAll() {
 
         try {
-            List<VehicleTheftReport> reports = vehicleTheftReportRules.showAllVehicleTheftReports();
+            List<TheftReport> reports = theftReportRules.showAllTheftReports();
             return ResponseEntity.ok().body(reports);
 
         } catch (NoDataFoundException ex) {
@@ -39,22 +39,22 @@ public class VehicleTheftReportController {
 
     @GetMapping
     @RequestMapping(path = "/{identification}")
-    public ResponseEntity<VehicleTheftReport> findByIdentification(@PathVariable String identification) {
+    public ResponseEntity<TheftReport> findByIdentification(@PathVariable String identification) {
 
         try {
-            VehicleTheftReport report = vehicleTheftReportRules.findVehicleTheftReportByIdentification(identification);
+            TheftReport report = theftReportRules.findTheftReportByIdentification(identification);
             return ResponseEntity.ok(report);
-        } catch (VehicleTheftReportNotFoundException ex) {
+        } catch (TheftReportNotFoundException ex) {
 
             return ResponseEntity.noContent().build();
         }
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<?> addVehicleTheftReport(@RequestBody VehicleTheftReport report) {
+    public ResponseEntity<?> addTheftReport(@RequestBody TheftReport report) {
 
         try {
-            vehicleTheftReportRules.addReport(report);
+            theftReportRules.addReport(report);
             return ResponseEntity.status(HttpStatus.CREATED).body(report);
         } catch (InvalidDataException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
@@ -62,7 +62,7 @@ public class VehicleTheftReportController {
     }
 
     @PutMapping(path = "/{identification}", consumes = "application/json")
-    public ResponseEntity<VehicleTheftReport> updateVehicleTheftReport(@PathVariable String identification, @RequestBody VehicleTheftReport report) {
+    public ResponseEntity<TheftReport> updateTheftReport(@PathVariable String identification, @RequestBody TheftReport report) {
         return ResponseEntity.ok().body(report);
     }
 

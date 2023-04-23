@@ -36,11 +36,11 @@ public class Vehicle {
     private String model;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    private VehicleRegistration registration;
+    private Registration registration;
 
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("vehicle")
-    private List<VehicleTheftReport> theftReports;
+    private List<TheftReport> theftReports;
 
     public Long getId() {
         return id;
@@ -90,19 +90,19 @@ public class Vehicle {
         this.model = model;
     }
 
-    public VehicleRegistration getRegistration() {
+    public Registration getRegistration() {
         return registration;
     }
 
-    public void setRegistration(VehicleRegistration registration) {
+    public void setRegistration(Registration registration) {
         this.registration = registration;
     }
 
-    public List<VehicleTheftReport> getTheftReports() {
+    public List<TheftReport> getTheftReports() {
         return theftReports;
     }
 
-    public void setTheftReports(List<VehicleTheftReport> theftReports) {
+    public void setTheftReports(List<TheftReport> theftReports) {
         this.theftReports = theftReports;
     }
 

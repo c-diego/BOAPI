@@ -1,21 +1,21 @@
 package br.edu.utfpr.td.tsi.api.rules.validation;
 
 import br.edu.utfpr.td.tsi.api.exception.InvalidDataException;
-import br.edu.utfpr.td.tsi.api.model.VehicleTheftReport;
+import br.edu.utfpr.td.tsi.api.model.TheftReport;
 
-public class ValidateVehicleTheftReport {
+public class ValidateTheftReport {
 
-    public static void validate(VehicleTheftReport report) throws InvalidDataException {
+    public static void validate(TheftReport report) throws InvalidDataException {
 
         if (report.getDateOfOccurrence() == null) {
             throw new InvalidDataException("Invalid dateOfOccurence");
         }
 
-        if (report.getTimeOfDay() == null) {
+        if (report.getPeriod()== null) {
             throw new InvalidDataException("Invalid timeOfDay");
         }
 
-        if (report.getLocation() == null) {
+        if (report.getAdress()== null) {
             throw new InvalidDataException("Invalid location");
         }
 

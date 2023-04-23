@@ -32,9 +32,9 @@ public class Address {
     @Column(nullable = false)
     private String state;
 
-    @OneToMany(mappedBy = "location", orphanRemoval = true)
+    @OneToMany(mappedBy = "address", orphanRemoval = true)
     @JsonIgnore
-    private List<VehicleTheftReport> theftReports;
+    private List<TheftReport> theftReports;
 
     public Long getId() {
         return id;
@@ -84,11 +84,11 @@ public class Address {
         this.state = state;
     }
 
-    public List<VehicleTheftReport> getTheftReports() {
+    public List<TheftReport> getTheftReports() {
         return theftReports;
     }
 
-    public void setTheftReports(List<VehicleTheftReport> theftReports) {
+    public void setTheftReports(List<TheftReport> theftReports) {
         this.theftReports = theftReports;
     }
 

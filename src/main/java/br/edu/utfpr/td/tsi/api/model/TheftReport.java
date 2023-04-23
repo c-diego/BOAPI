@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import java.util.Objects;
 
 @Entity
-public class VehicleTheftReport {
+public class TheftReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -23,10 +23,10 @@ public class VehicleTheftReport {
     private String dateOfOccurrence;
 
     @Column(nullable = false)
-    private String timeOfDay;
+    private String period;
 
     @ManyToOne
-    private Address location;
+    private Address address;
 
     @JsonIgnoreProperties("theftReports")
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -49,20 +49,20 @@ public class VehicleTheftReport {
         this.dateOfOccurrence = dateOfOccurrence;
     }
 
-    public String getTimeOfDay() {
-        return timeOfDay;
+    public String getPeriod() {
+        return period;
     }
 
-    public void setTimeOfDay(String timeOfDay) {
-        this.timeOfDay = timeOfDay;
+    public void setPeriod(String period) {
+        this.period = period;
     }
 
-    public Address getLocation() {
-        return location;
+    public Address getAdress() {
+        return address;
     }
 
-    public void setLocation(Address location) {
-        this.location = location;
+    public void setAdress(Address address) {
+        this.address = address;
     }
 
     public Vehicle getVehicle() {
@@ -91,7 +91,7 @@ public class VehicleTheftReport {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final VehicleTheftReport other = (VehicleTheftReport) obj;
+        final TheftReport other = (TheftReport) obj;
         return Objects.equals(this.identification, other.identification);
     }
 

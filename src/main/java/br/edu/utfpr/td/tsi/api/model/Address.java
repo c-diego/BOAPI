@@ -1,5 +1,6 @@
 package br.edu.utfpr.td.tsi.api.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,13 +16,22 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String street;
+    
+    @Column(nullable = false)
     private int number;
+    
+    @Column(nullable = false)
     private String neighborhood;
+    
+    @Column(nullable = false)
     private String city;
+    
+    @Column(nullable = false)
     private String state;
 
-    @OneToMany(mappedBy = "location")
+    @OneToMany(mappedBy = "location", orphanRemoval = true)
     private List<VehicleTheftReport> theftReports;
 
     public Long getId() {

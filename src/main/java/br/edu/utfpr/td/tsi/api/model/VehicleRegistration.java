@@ -1,5 +1,6 @@
 package br.edu.utfpr.td.tsi.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +26,8 @@ public class VehicleRegistration {
     @Column(nullable = false)
     private String city;
 
-    @OneToOne(mappedBy = "vehicleRegistration", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "registration", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Vehicle vehicle;
 
     public Long getId() {

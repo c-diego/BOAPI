@@ -1,10 +1,10 @@
 package br.edu.utfpr.td.tsi.api.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.util.Objects;
 
@@ -15,13 +15,19 @@ public class Part {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = true)
     private String name;
+
+    @Column(nullable = true)
     private String email;
+
+    @Column(nullable = true)
     private String phoneNumber;
+
+    @Column(nullable = true)
     private String typeOfInvolvement;
 
     @ManyToOne
-    @JoinColumn(name = "report_id")
     private VehicleTheftReport theftReport;
 
     public Long getId() {

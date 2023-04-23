@@ -30,17 +30,17 @@ public class VehicleTheftReport {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar dateOfOccurrence;
     
+    @Column(nullable = false)
     private String timeOfDay;
 
     @ManyToOne
-    @JoinColumn(name = "location_id")
     private Address location;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
     private Vehicle vehicle;
 
-    @OneToMany(mappedBy = "theftReport")
+    @OneToMany(mappedBy = "theftReport", orphanRemoval = true)
     private List<Part> involvedParts;
 
     public Long getId() {

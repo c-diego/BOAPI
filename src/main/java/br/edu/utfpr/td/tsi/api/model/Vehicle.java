@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.List;
@@ -21,22 +20,21 @@ public class Vehicle {
 
     @Column(nullable = false)
     private int yearOfManufacture;
-    
+
     @Column(nullable = false)
     private String color;
-    
+
     @Column(nullable = false)
     private String brand;
-    
+
     @Column(nullable = false)
     private String typeVehicle;
-    
+
     @Column(nullable = false)
     private String model;
-    
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "registration_id", referencedColumnName = "id")
-    private VehicleRegistration vehicleRegistration;
+    private VehicleRegistration registration;
 
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VehicleTheftReport> theftReports;
@@ -89,12 +87,12 @@ public class Vehicle {
         this.model = model;
     }
 
-    public VehicleRegistration getVehicleRegistration() {
-        return vehicleRegistration;
+    public VehicleRegistration getRegistration() {
+        return registration;
     }
 
-    public void setVehicleRegistration(VehicleRegistration vehicleRegistration) {
-        this.vehicleRegistration = vehicleRegistration;
+    public void setRegistration(VehicleRegistration registration) {
+        this.registration = registration;
     }
 
     public List<VehicleTheftReport> getTheftReports() {
@@ -127,4 +125,8 @@ public class Vehicle {
         return Objects.equals(this.id, other.id);
     }
 
+    @Override
+    public String toString() {
+        return "Vehicle{" + "id=" + id + ", yearOfManufacture=" + yearOfManufacture + ", color=" + color + ", brand=" + brand + ", typeVehicle=" + typeVehicle + ", model=" + model + ", vehicleRegistration=" + registration + ", theftReports=" + theftReports + '}';
+    }
 }

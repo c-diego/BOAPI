@@ -25,7 +25,7 @@ public class TheftReport {
     @Column(nullable = false)
     private String period;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Address address;
 
     @JsonIgnoreProperties("theftReports")
@@ -57,11 +57,11 @@ public class TheftReport {
         this.period = period;
     }
 
-    public Address getAdress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAdress(Address address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

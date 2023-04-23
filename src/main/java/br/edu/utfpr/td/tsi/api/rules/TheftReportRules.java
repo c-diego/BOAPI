@@ -13,6 +13,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import br.edu.utfpr.td.tsi.api.repository.ITheftReportRepository;
+import br.edu.utfpr.td.tsi.api.rules.validation.ValidateInputData;
 
 @Component
 public class TheftReportRules implements ITheftReportRules {
@@ -54,7 +55,9 @@ public class TheftReportRules implements ITheftReportRules {
 
     @Override
     public void addReport(TheftReport report) throws InvalidDataException {
-        //ValidateVehicleTheftReport.validate(vehicleTheftReport);
+        
+        ValidateInputData.validateTheftReport(report);
+        
 
         if (report.getVehicle().getId() != null) {
             Vehicle vehicle = entityManager.find(Vehicle.class, report.getVehicle().getId());

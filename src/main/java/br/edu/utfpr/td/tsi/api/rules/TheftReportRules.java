@@ -69,20 +69,72 @@ public class TheftReportRules implements ITheftReportRules {
         ValidateInputData.validateTheftReport(report);
 
         Long vehicleId = report.getVehicle().getId();
-        
+
         if (vehicleId != null) {
             addReportWithExistingVehicle(report.getVehicle().getId(), report);
         } else {
             verifyLicensePlate(report.getVehicle().getRegistration().getLicensePlate());
         }
-        
+
         Long addressId = report.getAddress().getIdentification();
-        
+
         if (addressId != null) {
             addReportWithExistingAddress(addressId, report);
         }
 
         theftReportRepository.save(report);
+    }
+
+    @Override
+    public TheftReport updateTheftReport(String identification, TheftReport updatedTheftReport) throws EntityNotFoundException, InvalidDataException {
+
+        TheftReport theftReport = theftReportRepository.findByIdentification(identification);
+
+        if (theftReport == null) {
+            throw new EntityNotFoundException("Theft report not found");
+        }
+
+        if (updatedTheftReport.getVehicle() != null) {
+
+            String licensePlate = updatedTheftReport.getVehicle().getRegistration().getLicensePlate();
+            Vehicle vehicle = vehicleRepository.findByRegistrationLicensePlate(licensePlate);
+
+            if (vehicle == null) {
+                throw new EntityNotFoundException("Vehicle not found");
+            }
+
+            theftReport.setVehicle(vehicle);
+        }
+
+        if (updatedTheftReport.getAddress() != null) {
+            Long id = updatedTheftReport.getAddress().getIdentification();
+
+            Address address = addressRepository.findById(id).orElse(null);
+
+            if (address == null) {
+                throw new EntityNotFoundException("Address not found");
+            }
+
+            theftReport.setAddress(address);
+        }
+
+        theftReport.setDateOfOccurrence(updatedTheftReport.getDateOfOccurrence());
+        theftReport.setPeriod(updatedTheftReport.getPeriod());
+
+        theftReportRepository.save(theftReport);
+
+        return theftReport;
+    }
+
+    @Override
+    public void delete(String identification) throws EntityNotFoundException {
+
+        if (!theftReportRepository.existsById(identification)) {
+            throw new EntityNotFoundException("Theft report not found");
+        }
+
+        theftReportRepository.deleteById(identification);
+
     }
 
     private void addReportWithExistingVehicle(Long id, TheftReport report) {
@@ -106,11 +158,11 @@ public class TheftReportRules implements ITheftReportRules {
         report.setAddress(address);
 
     }
-    
+
     private void verifyLicensePlate(String licensePlate) {
-        
+
         Vehicle vehicle = vehicleRepository.findByRegistrationLicensePlate(licensePlate);
-        
+
         if (vehicle != null) {
             throw new RuntimeException("License plate is already registered");
         }

@@ -19,7 +19,7 @@ import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping(path = "/theftReports", produces = "application/json")
-public class VehicleTheftReportController {
+public class TheftReportController {
 
     @Autowired
     private ITheftReportRules theftReportRules;
@@ -61,13 +61,28 @@ public class VehicleTheftReportController {
     }
 
     @PutMapping(path = "/{identification}", consumes = "application/json")
-    public ResponseEntity<TheftReport> updateTheftReport(@PathVariable String identification, @RequestBody TheftReport report) {
-        return ResponseEntity.ok().body(report);
+    public ResponseEntity<?> updateTheftReport(@PathVariable String identification, @RequestBody TheftReport updatedReport) {
+
+        try {
+            TheftReport report = theftReportRules.updateTheftReport(identification, updatedReport);
+            return ResponseEntity.ok().body(report);
+        
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @DeleteMapping(path = "/{identification}")
     public ResponseEntity<Void> delete(@PathVariable String identification) {
-        return ResponseEntity.ok().build();
+        
+        try {
+            theftReportRules.delete(identification);
+            return ResponseEntity.ok().build();
+        
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

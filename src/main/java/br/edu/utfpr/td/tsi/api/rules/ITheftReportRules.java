@@ -17,6 +17,8 @@ public interface ITheftReportRules {
     
     void addReport(final TheftReport theftReport)throws InvalidDataException;
     
-    //public void updateTheftReport(final String identification, TheftReport updatedTheftReport) throws EntityNotFoundException, InvalidDataException;
+    TheftReport updateTheftReport(final String identification, TheftReport updatedTheftReport) throws EntityNotFoundException, InvalidDataException;
 
+    void delete(final String identification) throws EntityNotFoundException;
+    
 }

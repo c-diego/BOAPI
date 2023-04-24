@@ -18,8 +18,8 @@ import lombok.Data;
 public class Vehicle {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String identification;
 
     @Column(nullable = false)
     private int yearManufacture;

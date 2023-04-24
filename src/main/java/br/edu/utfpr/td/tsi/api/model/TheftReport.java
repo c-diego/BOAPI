@@ -31,7 +31,7 @@ public class TheftReport {
 
     @JsonIgnoreProperties("theftReports")
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
+    @JoinColumn(referencedColumnName = "identification")
     private Vehicle vehicle;
 
 }

@@ -15,8 +15,8 @@ import lombok.Data;
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long identification;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String identification;
 
     @Column(nullable = false)
     private String street;

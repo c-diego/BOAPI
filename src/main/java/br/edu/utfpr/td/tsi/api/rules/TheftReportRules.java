@@ -6,7 +6,6 @@ import br.edu.utfpr.td.tsi.api.model.Address;
 import br.edu.utfpr.td.tsi.api.model.TheftReport;
 import br.edu.utfpr.td.tsi.api.model.Vehicle;
 import br.edu.utfpr.td.tsi.api.repository.IAddressRepository;
-import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +27,6 @@ public class TheftReportRules implements ITheftReportRules {
 
     @Autowired
     private IAddressRepository addressRepository;
-
-    @Autowired
-    private EntityManager entityManager;
 
     @Override
     public List<TheftReport> showAllTheftReports() throws NoDataFoundException {
@@ -68,18 +64,19 @@ public class TheftReportRules implements ITheftReportRules {
 
         ValidateInputData.validateTheftReport(report);
 
-        Long vehicleId = report.getVehicle().getId();
+        String vehicleIdentification = report.getVehicle().getIdentification();
 
-        if (vehicleId != null) {
-            addReportWithExistingVehicle(report.getVehicle().getId(), report);
+        if (vehicleIdentification != null) {
+            addReportWithExistingVehicle(report.getVehicle().getIdentification(), report);
+        
         } else {
             verifyLicensePlate(report.getVehicle().getRegistration().getLicensePlate());
         }
 
-        Long addressId = report.getAddress().getIdentification();
+        String addressIdentification = report.getAddress().getIdentification();
 
-        if (addressId != null) {
-            addReportWithExistingAddress(addressId, report);
+        if (addressIdentification != null) {
+            addReportWithExistingAddress(addressIdentification, report);
         }
 
         theftReportRepository.save(report);
@@ -107,9 +104,10 @@ public class TheftReportRules implements ITheftReportRules {
         }
 
         if (updatedTheftReport.getAddress() != null) {
-            Long id = updatedTheftReport.getAddress().getIdentification();
+            
+            String addressIdentification = updatedTheftReport.getAddress().getIdentification();
 
-            Address address = addressRepository.findById(id).orElse(null);
+            Address address = addressRepository.findById(addressIdentification).orElse(null);
 
             if (address == null) {
                 throw new EntityNotFoundException("Address not found");
@@ -137,9 +135,9 @@ public class TheftReportRules implements ITheftReportRules {
 
     }
 
-    private void addReportWithExistingVehicle(Long id, TheftReport report) {
+    private void addReportWithExistingVehicle(String identification, TheftReport report) {
 
-        Vehicle vehicle = vehicleRepository.findById(id).orElse(null);
+        Vehicle vehicle = vehicleRepository.findByIdentification(identification);
 
         if (vehicle == null) {
             throw new EntityNotFoundException("Vehicle not found");
@@ -148,9 +146,9 @@ public class TheftReportRules implements ITheftReportRules {
         report.setVehicle(vehicle);
     }
 
-    private void addReportWithExistingAddress(Long id, TheftReport report) {
+    private void addReportWithExistingAddress(String identification, TheftReport report) {
 
-        Address address = addressRepository.findById(id).orElse(null);
+        Address address = addressRepository.findByIdentification(identification);
 
         if (address == null) {
             throw new EntityNotFoundException("Address not found");

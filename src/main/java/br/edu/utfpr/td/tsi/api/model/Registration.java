@@ -15,8 +15,8 @@ import lombok.Data;
 public class Registration {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String identification;
 
     @Column(unique = true, nullable = false)
     private String licensePlate;

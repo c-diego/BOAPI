@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IVehicleRepository extends JpaRepository<Vehicle, Long> {
+public interface IVehicleRepository extends JpaRepository<Vehicle, String> {
 
-    public Vehicle findByRegistrationLicensePlate(String licensePlate);
+    Vehicle findByRegistrationLicensePlate(String licensePlate);
+    
+    Vehicle findByIdentification(String identification);
 
-    public List<Vehicle> findAll(Specification<Vehicle> spec);
+    List<Vehicle> findAll(Specification<Vehicle> spec);
 }

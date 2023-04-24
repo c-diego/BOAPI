@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ITheftReportRepository extends JpaRepository<TheftReport, String> {
 
-    public TheftReport findByIdentification(String identification);
+    TheftReport findByIdentification(String identification);
 
-    public List<TheftReport> findAll(Specification<TheftReport> spec);
+    List<TheftReport> findAll(Specification<TheftReport> spec);
 
 }

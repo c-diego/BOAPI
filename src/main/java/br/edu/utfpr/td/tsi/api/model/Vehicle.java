@@ -10,8 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.List;
-import java.util.Objects;
+import lombok.Data;
 
+@Data
 @Entity
 @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
 public class Vehicle {
@@ -42,89 +43,4 @@ public class Vehicle {
     @JsonIgnoreProperties("vehicle")
     private List<TheftReport> theftReports;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getYearManufacture() {
-        return yearManufacture;
-    }
-
-    public void setYearManufacture(int yearManufacture) {
-        this.yearManufacture = yearManufacture;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getMake() {
-        return make;
-    }
-
-    public void setMake(String make) {
-        this.make = make;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public Registration getRegistration() {
-        return registration;
-    }
-
-    public void setRegistration(Registration registration) {
-        this.registration = registration;
-    }
-
-    public List<TheftReport> getTheftReports() {
-        return theftReports;
-    }
-
-    public void setTheftReports(List<TheftReport> theftReports) {
-        this.theftReports = theftReports;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Vehicle other = (Vehicle) obj;
-        return Objects.equals(this.id, other.id);
-    }
 }

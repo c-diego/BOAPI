@@ -1,6 +1,5 @@
 package br.edu.utfpr.td.tsi.api.rules;
 
-import br.edu.utfpr.td.tsi.api.exception.InvalidDataException;
 import br.edu.utfpr.td.tsi.api.exception.NoDataFoundException;
 import br.edu.utfpr.td.tsi.api.model.Address;
 import br.edu.utfpr.td.tsi.api.model.TheftReport;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import br.edu.utfpr.td.tsi.api.repository.ITheftReportRepository;
 import br.edu.utfpr.td.tsi.api.repository.IVehicleRepository;
-import br.edu.utfpr.td.tsi.api.rules.validation.ValidateInputData;
 import jakarta.persistence.EntityNotFoundException;
 
 @Component
@@ -60,9 +58,7 @@ public class TheftReportRules implements ITheftReportRules {
     }
 
     @Override
-    public void addReport(TheftReport report) throws InvalidDataException {
-
-        ValidateInputData.validateTheftReport(report);
+    public void addReport(TheftReport report) {
 
         String vehicleIdentification = report.getVehicle().getIdentification();
 
@@ -83,7 +79,7 @@ public class TheftReportRules implements ITheftReportRules {
     }
 
     @Override
-    public TheftReport updateTheftReport(String identification, TheftReport updatedTheftReport) throws EntityNotFoundException, InvalidDataException {
+    public TheftReport updateTheftReport(String identification, TheftReport updatedTheftReport) throws EntityNotFoundException {
 
         TheftReport theftReport = theftReportRepository.findByIdentification(identification);
 

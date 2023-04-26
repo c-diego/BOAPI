@@ -1,11 +1,13 @@
 package br.edu.utfpr.td.tsi.api.rules;
 
-import br.edu.utfpr.td.tsi.api.exception.NoDataFoundException;
-import br.edu.utfpr.td.tsi.api.model.Vehicle;
-import br.edu.utfpr.td.tsi.api.repository.IVehicleRepository;
-import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Map;
+
+import br.edu.utfpr.td.tsi.api.exception.NoDataFoundException;
+import br.edu.utfpr.td.tsi.api.exception.NotFoundException;
+import br.edu.utfpr.td.tsi.api.model.Vehicle;
+import br.edu.utfpr.td.tsi.api.repository.IVehicleRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -17,7 +19,7 @@ public class VehicleRules implements IVehicleRules {
     private IVehicleRepository vehicleRepository;
 
     @Override
-    public List<Vehicle> showAllVehicles() throws NoDataFoundException {
+    public List<Vehicle> showAll() throws NoDataFoundException {
 
         List<Vehicle> vehicles = vehicleRepository.findAll();
 
@@ -29,18 +31,19 @@ public class VehicleRules implements IVehicleRules {
     }
 
     @Override
-    public Vehicle findVehicleByLicensePlate(String licensePlate) throws EntityNotFoundException {
+    public Vehicle findByLicensePlate(final String licensePlate) throws NotFoundException {
+
         Vehicle vehicle = vehicleRepository.findByRegistrationLicensePlate(licensePlate);
 
         if (vehicle == null) {
-            throw new EntityNotFoundException("Vehicle not found");
+            throw new NotFoundException("Vehicle not found");
         }
 
         return vehicle;
     }
 
     @Override
-    public List<Vehicle> findVehicleByAttributes(Map<String, String> params) throws NoDataFoundException {
+    public List<Vehicle> findByAttributes(final Map<String, String> params) throws NoDataFoundException {
 
         Specification<Vehicle> spec = Specification.where(null);
 

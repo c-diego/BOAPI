@@ -1,4 +1,4 @@
-package br.edu.utfpr.td.tsi.api.rules;
+package br.edu.utfpr.td.tsi.api.service;
 
 import java.util.List;
 import java.util.Map;
@@ -7,7 +7,7 @@ import br.edu.utfpr.td.tsi.api.exception.NoDataFoundException;
 import br.edu.utfpr.td.tsi.api.exception.NotFoundException;
 import br.edu.utfpr.td.tsi.api.model.Report;
 
-public interface IReportRules {
+public interface ReportService {
 
     Report findByIdentification(final String identification) throws NotFoundException;
 

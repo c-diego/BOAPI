@@ -1,4 +1,4 @@
-package br.edu.utfpr.td.tsi.api.rules;
+package br.edu.utfpr.td.tsi.api.service;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
-public class VehicleRules implements IVehicleRules {
+public class VehicleServiceImpl implements VehicleService {
 
     @Autowired
     private IVehicleRepository vehicleRepository;

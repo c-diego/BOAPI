@@ -1,4 +1,4 @@
-package br.edu.utfpr.td.tsi.api.rules;
+package br.edu.utfpr.td.tsi.api.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ReportRules implements IReportRules {
+public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private IReportRepository reportRepository;

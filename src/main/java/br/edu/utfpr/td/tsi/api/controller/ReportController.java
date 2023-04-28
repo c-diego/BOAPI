@@ -2,7 +2,6 @@ package br.edu.utfpr.td.tsi.api.controller;
 
 import java.util.List;
 
-import br.edu.utfpr.td.tsi.api.rules.IReportRules;
 import br.edu.utfpr.td.tsi.api.model.Report;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import br.edu.utfpr.td.tsi.api.service.ReportService;
 
 @RestController
 @RequestMapping(path = "/reports", produces = "application/json")
-public class reportController {
+public class ReportController {
 
     @Autowired
-    private IReportRules reportRules;
+    private ReportService reportRules;
 
     @GetMapping
     public ResponseEntity<List<Report>> findAll() {

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import br.edu.utfpr.td.tsi.api.model.Vehicle;
-import br.edu.utfpr.td.tsi.api.rules.IVehicleRules;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +12,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
+import br.edu.utfpr.td.tsi.api.service.VehicleService;
 
 @RestController
 @RequestMapping(value = "/vehicles", produces = "application/json")
 public class VehicleController {
 
     @Autowired
-    private IVehicleRules vehicleRules;
+    private VehicleService vehicleRules;
 
     @GetMapping
     public ResponseEntity<List<Vehicle>> findAll() {

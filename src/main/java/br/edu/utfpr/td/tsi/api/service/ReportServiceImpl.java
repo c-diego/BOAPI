@@ -41,7 +41,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public Report findByIdentification(final String identification) throws NotFoundException {
+    public Report findByIdentification(final String identification) {
 
         Report report = reportRepository.findByIdentification(identification);
 
@@ -54,7 +54,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<Report> findByAttributes(final Map<String, String> params) throws NoDataFoundException {
+    public List<Report> findByAttributes(final Map<String, String> params) {
         return new ArrayList<>(); // TODO implement
 
     }
@@ -62,26 +62,18 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void add(Report report) {
 
-        String vehicleIdentification = report.getVehicle().getIdentification();
-
-        if (vehicleIdentification != null) {
-            mapVehicle(report.getVehicle().getIdentification(), report);
-
-        } else {
-            verifyLicensePlate(report.getVehicle().getRegistration().getLicensePlate());
-        }
+        verifyLicensePlate(report.getVehicle().getRegistration().getLicensePlate());
+        mapVehicle(report.getVehicle().getIdentification(), report);
 
         String addressIdentification = report.getAddress().getIdentification();
 
-        if (addressIdentification != null) {
-            mapAddress(addressIdentification, report);
-        }
+        mapAddress(addressIdentification, report);
 
         reportRepository.save(report);
     }
 
     @Override
-    public Report update(final String identification, Report updatedReport) throws NotFoundException {
+    public Report update(final String identification, Report updatedReport) {
 
         Report report = reportRepository.findByIdentification(identification);
 
@@ -99,7 +91,6 @@ public class ReportServiceImpl implements ReportService {
 
         mapVehicle(updatedReport.getVehicle().getIdentification(), updatedReport);
         mapAddress(updatedReport.getAddress().getIdentification(), updatedReport);
-        
 
         report.setDateOccurrence(updatedReport.getDateOccurrence());
         report.setPeriod(updatedReport.getPeriod());
@@ -110,7 +101,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void delete(final String identification) throws NotFoundException {
+    public void delete(final String identification) {
 
         if (!reportRepository.existsById(identification)) {
             throw new NotFoundException("Report not found");
@@ -138,7 +129,7 @@ public class ReportServiceImpl implements ReportService {
         if (address == null) {
             throw new NotFoundException("Address not found");
         }
-        
+
         report.setAddress(address);
 
     }

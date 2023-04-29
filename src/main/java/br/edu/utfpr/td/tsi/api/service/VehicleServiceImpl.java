@@ -31,7 +31,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public Vehicle findByLicensePlate(final String licensePlate) throws NotFoundException {
+    public Vehicle findByLicensePlate(final String licensePlate) {
 
         Vehicle vehicle = vehicleRepository.findByRegistrationLicensePlate(licensePlate);
 
@@ -43,7 +43,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public List<Vehicle> findByAttributes(final Map<String, String> params) throws NoDataFoundException {
+    public List<Vehicle> findByAttributes(final Map<String, String> params) {
 
         Specification<Vehicle> spec = Specification.where(null);
 

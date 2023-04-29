@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.edu.utfpr.td.tsi.api.service.ReportService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/reports", produces = "application/json")
@@ -36,13 +37,13 @@ public class ReportController {
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<?> add(@RequestBody Report report) {
+    public ResponseEntity<?> add(@RequestBody @Valid Report report) {
         reportRules.add(report);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping(path = "/{identification}", consumes = "application/json")
-    public ResponseEntity<?> update(@PathVariable String identification, @RequestBody Report updatedReport) {
+    public ResponseEntity<?> update(@PathVariable String identification, @RequestBody @Valid Report updatedReport) {
         return ResponseEntity.ok().body(reportRules.update(identification, updatedReport));
     }
 

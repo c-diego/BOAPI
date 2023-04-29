@@ -14,13 +14,18 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 @Data
+@AllArgsConstructor(staticName = "build")
+@NoArgsConstructor
 @Entity
 public class Registration {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String identification;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     
     @NotNull(message = "licensePlate is required")
     @NotEmpty(message = "licensePlate must not be empty")

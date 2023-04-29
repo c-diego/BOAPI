@@ -19,7 +19,7 @@ public class VehicleServiceImpl implements VehicleService {
     private IVehicleRepository vehicleRepository;
 
     @Override
-    public List<Vehicle> showAll() throws NoDataFoundException {
+    public List<Vehicle> findAll() throws NoDataFoundException {
 
         List<Vehicle> vehicles = vehicleRepository.findAll();
 

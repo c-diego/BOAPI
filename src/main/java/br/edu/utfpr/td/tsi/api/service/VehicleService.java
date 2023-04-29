@@ -7,7 +7,7 @@ import br.edu.utfpr.td.tsi.api.model.Vehicle;
 
 public interface VehicleService {
 
-    List<Vehicle> showAll();
+    List<Vehicle> findAll();
 
     Vehicle findByLicensePlate(final String licensePlate);
 

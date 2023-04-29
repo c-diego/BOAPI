@@ -3,6 +3,8 @@ package br.edu.utfpr.td.tsi.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,6 +19,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Data
+@AllArgsConstructor(staticName = "build")
+@NoArgsConstructor
 @Entity
 public class Report {
 
@@ -25,12 +29,12 @@ public class Report {
     private String identification;
 
     @NotNull(message = "dateOccurence is required")
-    @NotEmpty(message = "dateOccurence is required")
+    @NotEmpty(message = "dateOccurence must not be empty")
     @Column(nullable = false)
     private String dateOccurrence;
 
     @NotNull(message = "period is required")
-    @NotEmpty(message = "period is required")
+    @NotEmpty(message = "period must not be empty")
     @Column(nullable = false)
     private String period;
 
@@ -41,7 +45,7 @@ public class Report {
     @JsonIgnoreProperties("reports")
     @NotNull(message = "vehicle is required")
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "identification")
+    @JoinColumn(referencedColumnName = "id")
     private Vehicle vehicle;
 
 }

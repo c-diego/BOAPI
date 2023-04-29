@@ -23,33 +23,33 @@ import jakarta.validation.Valid;
 public class ReportController {
 
     @Autowired
-    private ReportService reportRules;
+    private ReportService service;
 
     @GetMapping
     public ResponseEntity<List<Report>> findAll() {
-        return ResponseEntity.ok().body(reportRules.showAll());
+        return ResponseEntity.ok().body(service.showAll());
     }
 
     @GetMapping
     @RequestMapping(path = "/{identification}")
     public ResponseEntity<Report> findByIdentification(@PathVariable String identification) {
-        return ResponseEntity.ok(reportRules.findByIdentification(identification));
+        return ResponseEntity.ok(service.findByIdentification(identification));
     }
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<?> add(@RequestBody @Valid Report report) {
-        reportRules.add(report);
+        service.add(report);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping(path = "/{identification}", consumes = "application/json")
     public ResponseEntity<?> update(@PathVariable String identification, @RequestBody @Valid Report updatedReport) {
-        return ResponseEntity.ok().body(reportRules.update(identification, updatedReport));
+        return ResponseEntity.ok().body(service.update(identification, updatedReport));
     }
 
     @DeleteMapping(path = "/{identification}")
     public ResponseEntity<Void> delete(@PathVariable String identification) {
-        reportRules.delete(identification);
+        service.delete(identification);
         return ResponseEntity.ok().build();
     }
 

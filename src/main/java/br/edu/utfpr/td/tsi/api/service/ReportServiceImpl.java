@@ -63,11 +63,11 @@ public class ReportServiceImpl implements ReportService {
     public void add(Report report) {
 
         verifyLicensePlate(report.getVehicle().getRegistration().getLicensePlate());
-        mapVehicle(report.getVehicle().getIdentification(), report);
+        mapVehicle(report.getVehicle().getId(), report);
 
-        String addressIdentification = report.getAddress().getIdentification();
+        Long addressId = report.getAddress().getId();
 
-        mapAddress(addressIdentification, report);
+        mapAddress(addressId, report);
 
         reportRepository.save(report);
     }
@@ -89,8 +89,8 @@ public class ReportServiceImpl implements ReportService {
             throw new NotFoundException("Address not found");
         }
 
-        mapVehicle(updatedReport.getVehicle().getIdentification(), updatedReport);
-        mapAddress(updatedReport.getAddress().getIdentification(), updatedReport);
+        mapVehicle(updatedReport.getVehicle().getId(), updatedReport);
+        mapAddress(updatedReport.getAddress().getId(), updatedReport);
 
         report.setDateOccurrence(updatedReport.getDateOccurrence());
         report.setPeriod(updatedReport.getPeriod());
@@ -111,24 +111,18 @@ public class ReportServiceImpl implements ReportService {
 
     }
 
-    private void mapVehicle(final String identification, Report report) {
+    private void mapVehicle(final Long id, Report report) {
 
-        Vehicle vehicle = vehicleRepository.findByIdentification(identification);
-
-        if (vehicle == null) {
-            throw new NotFoundException("Vehicle not found");
-        }
+        Vehicle vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Vehicle not found"));
 
         report.setVehicle(vehicle);
     }
 
-    private void mapAddress(final String identification, Report report) {
+    private void mapAddress(final Long id, Report report) {
 
-        Address address = addressRepository.findByIdentification(identification);
-
-        if (address == null) {
-            throw new NotFoundException("Address not found");
-        }
+        Address address = addressRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Address not found"));
 
         report.setAddress(address);
 

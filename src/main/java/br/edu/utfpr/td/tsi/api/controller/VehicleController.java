@@ -23,7 +23,7 @@ public class VehicleController {
 
     @GetMapping
     public ResponseEntity<List<Vehicle>> findAll() {
-        return ResponseEntity.ok(vehicleRules.showAll());
+        return ResponseEntity.ok(vehicleRules.findAll());
     }
 
     @GetMapping("/{licensePlate}")

@@ -1,8 +1,12 @@
 package br.edu.utfpr.td.tsi.api.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,22 +17,24 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
+@AllArgsConstructor(staticName = "build")
+@NoArgsConstructor
 @Entity
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String identification;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @NotNull(message = "street is required")
     @NotEmpty(message = "street must not be empty")
     @Column(nullable = false)
     private String street;
 
-    @Min(value = 1, message = "number is required")
+    @NotNull(message = "number is required")
+    @Min(value = 1, message = "number must be after 0")
     @Column(nullable = false)
     private int number;
 

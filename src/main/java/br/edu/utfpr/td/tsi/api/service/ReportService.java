@@ -7,7 +7,7 @@ import br.edu.utfpr.td.tsi.api.model.Report;
 
 public interface ReportService {
 
-    void add(Report report);
+    Report add(Report report);
 
     Report findByIdentification(final String identification);
     

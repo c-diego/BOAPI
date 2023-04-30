@@ -60,7 +60,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void add(Report report) {
+    public Report add(Report report) {
 
         verifyLicensePlate(report.getVehicle().getRegistration().getLicensePlate());
         
@@ -70,7 +70,7 @@ public class ReportServiceImpl implements ReportService {
 
         mapAddress(addressId, report);
 
-        reportRepository.save(report);
+        return reportRepository.save(report);
     }
 
     @Override

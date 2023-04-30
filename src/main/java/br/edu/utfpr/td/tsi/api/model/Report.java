@@ -15,7 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Data
@@ -29,12 +28,10 @@ public class Report {
     private String identification;
 
     @NotNull(message = "dateOccurence is required")
-    @NotEmpty(message = "dateOccurence must not be empty")
     @Column(nullable = false)
     private String dateOccurrence;
 
     @NotNull(message = "period is required")
-    @NotEmpty(message = "period must not be empty")
     @Column(nullable = false)
     private String period;
 

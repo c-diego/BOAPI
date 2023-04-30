@@ -2,29 +2,33 @@ package br.edu.utfpr.td.tsi.api.controller;
 
 import br.edu.utfpr.td.tsi.api.exception.NoDataFoundException;
 import br.edu.utfpr.td.tsi.api.exception.NotFoundException;
+import br.edu.utfpr.td.tsi.api.model.Address;
+import br.edu.utfpr.td.tsi.api.model.Registration;
 import br.edu.utfpr.td.tsi.api.model.Report;
+import br.edu.utfpr.td.tsi.api.model.Vehicle;
 import br.edu.utfpr.td.tsi.api.service.ReportService;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mockito;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(ReportController.class)
@@ -39,10 +43,10 @@ public class ReportControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static List<Report> reports;
+    private List<Report> reports;
 
-    @BeforeAll
-    public static void createReports() {
+    @BeforeEach
+    public void init() {
 
         reports = List.of(
                 Report.build("report-1", "01/01/2023", "MANHA", null, null),
@@ -55,48 +59,39 @@ public class ReportControllerTest {
 
     @Test
     public void testFindReportNotFound() throws Exception {
-        Mockito.when(service.showAll())
+
+        Mockito.when(service.findByIdentification("report-50"))
                 .thenThrow(new NotFoundException("Report not found"));
 
-        MvcResult result = mockMvc.perform(get("/reports")
+        mockMvc.perform(get("/reports/report-50")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
-        assertEquals("{\"error\":\"Report not found\"}", result.getResponse().getContentAsString());
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.error").value("Report not found"));
     }
 
     @Test
     public void testFindReportFound() throws Exception {
-
-        String expectedJson = objectMapper.writeValueAsString(reports.get(0));
-        String identification = "report-1";
-
         Mockito.when(service.findByIdentification("report-1"))
                 .thenReturn(reports.get(0));
 
-        MvcResult result = mockMvc.perform(get("/reports/" + identification)
+        mockMvc.perform(get("/reports/report-1")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
-        assertEquals(expectedJson, result.getResponse().getContentAsString());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(reports.get(0))));
     }
 
     @Test
     public void testFindAllReportFound() throws Exception {
-
-        String expectedJson = objectMapper.writeValueAsString(reports);
-
         Mockito.when(service.showAll())
                 .thenReturn(reports);
 
-        MvcResult result = mockMvc.perform(get("/reports")
+        mockMvc.perform(get("/reports")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
-        assertEquals(expectedJson, result.getResponse().getContentAsString());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(reports)));
     }
 
     @Test
@@ -104,37 +99,34 @@ public class ReportControllerTest {
         Mockito.when(service.showAll())
                 .thenThrow(new NoDataFoundException("No reports found"));
 
-        MvcResult result = mockMvc.perform(get("/reports")
+        mockMvc.perform(get("/reports")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
-        assertEquals("{\"error\":\"No reports found\"}", result.getResponse().getContentAsString());
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.error").value("No reports found"));
     }
 
     @Test
     public void testCreateReportSuccessfully() throws Exception {
 
-        Report report = Report.build(null, "04/04/2023", "MADRUGADA", null, null);
+        Report report = createValidReportWhitoutId();
+
+        String expectedJson = objectMapper.writeValueAsString(report).
+                replace("null", "\"report-5\"");
 
         Mockito.when(service.add(report))
                 .then((invocation) -> {
                     Report reportSaved = invocation.getArgument(0, Report.class);
                     reportSaved.setIdentification("report-5");
-                    return report;
+                    return reportSaved;
                 });
 
-        String body = objectMapper.writeValueAsString(report);
-        report.setIdentification("report-5");
-        String expectedJson = objectMapper.writeValueAsString(report);
-
-        MvcResult result = mockMvc.perform(post("/reports")
-                .content(body)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        assertEquals(HttpStatus.CREATED.value(), result.getResponse().getStatus());
-        assertEquals(expectedJson, result.getResponse().getContentAsString());
+        mockMvc.perform(post("/reports")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(report)))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(expectedJson));
     }
 
     @Test
@@ -142,39 +134,58 @@ public class ReportControllerTest {
 
         Report report = Report.build(null, null, null, null, null);
 
-        // Cria um objeto BindingResult simulando um erro de validação
-        BindingResult bindingResult = new BeanPropertyBindingResult(report, "report");
-        bindingResult.rejectValue("dateOccurence", "NotNull");
-        bindingResult.rejectValue("period", "NotNull");
-        bindingResult.rejectValue("address", "NotNull");
-        bindingResult.rejectValue("vehicle", "NotNull");
-
-        Mockito.when(service.add(report))
-                .thenThrow(new MethodArgumentNotValidException(
-                        new MethodParameter(ReportService.class.getMethod("add", Report.class), 0),
-                        bindingResult));
-
-        String body = objectMapper.writeValueAsString(report);
-
-        String expectedJson = objectMapper.writeValueAsString(bindingResult);
-
-        MvcResult result = mockMvc.perform(post("/reports")
-                .content(body)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
-        assertEquals(expectedJson, result.getResponse().getContentAsString());
+        mockMvc.perform(post("/reports")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(report)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.dateOccurrence").value("dateOccurence is required"))
+                .andExpect(jsonPath("$.period").value("period is required"))
+                .andExpect(jsonPath("$.address").value("address is required"))
+                .andExpect(jsonPath("$.vehicle").value("vehicle is required"));
     }
 
     @Test
     public void testUpdateReportSuccessfully() throws Exception {
+        Report report = createValidReportWhitoutId();
+        report.setIdentification("report-2");
 
+        Mockito.when(service.update(report.getIdentification(), report))
+                .thenReturn(report);
+
+        mockMvc.perform(put("/reports/report-2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(report)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(report)));
     }
 
     @Test
     public void testUpdateReportUnsuccessfully() throws Exception {
+        Report report = reports.get(1);
+        report.setPeriod(null);
 
+        mockMvc.perform(put("/reports/report-2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(report)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.period").value("period is required"));
+    }
+
+    private Report createValidReportWhitoutId() {
+
+        Report report = Report.build(null, "04/04/2023", "MADRUGADA", null, null);
+        Address address = Address.build(1l, "RUA 10", 10, "SÃO JOSÉ", "SÃO PAULO", "SÃO PAULO", null);
+        Registration registration = Registration.build(1l, "ABC1D23", "SÃO PAULO", "SÃO PAULO", null);
+        Vehicle vehicle = Vehicle.build(1l, 0, "BLACK", "FIAT", "CARRO", "UNO", registration, null);
+
+        vehicle.setRegistration(registration);
+        report.setVehicle(vehicle);
+        report.setAddress(address);
+
+        return report;
     }
 
 }

@@ -9,10 +9,10 @@ import br.edu.utfpr.td.tsi.api.service.VehicleService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
 
 import org.mockito.Mockito;
 
@@ -39,10 +39,10 @@ public class VehicleControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static List<Vehicle> vehicles;
+    private List<Vehicle> vehicles;
 
-    @BeforeAll
-    public static void createVehicles() {
+    @BeforeEach
+    public void createVehicles() {
         vehicles = List.of(
                 Vehicle.build(1L, 2012, "PRETO", "FIAT", "CARRO", "UNO", null, null),
                 Vehicle.build(1L, 2014, "VERDE", "FIAT", "CARRO", "PALIO", null, null),

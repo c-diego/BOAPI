@@ -3,6 +3,7 @@ package br.edu.utfpr.td.tsi.api.controller;
 import java.util.List;
 
 import br.edu.utfpr.td.tsi.api.model.Report;
+import br.edu.utfpr.td.tsi.api.service.ReportService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import br.edu.utfpr.td.tsi.api.service.ReportService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -38,8 +38,7 @@ public class ReportController {
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<?> add(@RequestBody @Valid Report report) {
-        service.add(report);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.add(report));
     }
 
     @PutMapping(path = "/{identification}", consumes = "application/json")

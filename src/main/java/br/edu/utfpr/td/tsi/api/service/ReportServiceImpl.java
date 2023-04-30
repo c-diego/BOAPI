@@ -63,6 +63,7 @@ public class ReportServiceImpl implements ReportService {
     public void add(Report report) {
 
         verifyLicensePlate(report.getVehicle().getRegistration().getLicensePlate());
+        
         mapVehicle(report.getVehicle().getId(), report);
 
         Long addressId = report.getAddress().getId();
@@ -136,5 +137,5 @@ public class ReportServiceImpl implements ReportService {
             throw new RuntimeException("License plate is already registered");
         }
     }
-
+    
 }

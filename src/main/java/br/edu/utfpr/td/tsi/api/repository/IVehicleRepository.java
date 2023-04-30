@@ -11,7 +11,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IVehicleRepository extends JpaRepository<Vehicle, Long> {
 
-    Vehicle findByRegistrationLicensePlate(String licensePlate);
+    Vehicle findByRegistrationLicensePlate(final String licensePlate);
+
+    List<Vehicle> findByColorAndType(final String color, final String type);
+
+    List<Vehicle> findByColor(final String color);
+
+    List<Vehicle> findByType(final String type);
 
     List<Vehicle> findAll(Specification<Vehicle> spec);
+
 }

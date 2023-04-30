@@ -1,7 +1,6 @@
 package br.edu.utfpr.td.tsi.api.service;
 
 import java.util.List;
-import java.util.Map;
 
 import br.edu.utfpr.td.tsi.api.exception.NoDataFoundException;
 import br.edu.utfpr.td.tsi.api.exception.NotFoundException;
@@ -9,63 +8,60 @@ import br.edu.utfpr.td.tsi.api.model.Vehicle;
 import br.edu.utfpr.td.tsi.api.repository.IVehicleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VehicleServiceImpl implements VehicleService {
 
     @Autowired
-    private IVehicleRepository vehicleRepository;
+    private IVehicleRepository repository;
 
     @Override
-    public List<Vehicle> findAll() throws NoDataFoundException {
+    public List<Vehicle> findAll() {
 
-        List<Vehicle> vehicles = vehicleRepository.findAll();
-
-        if (vehicles.isEmpty()) {
-            throw new NoDataFoundException("No vehicles found");
-        }
-
-        return vehicles;
+        List<Vehicle> vehicles = repository.findAll();
+        return findVehiclesOrThrowNoDataFoundException(vehicles, "No vehicles found");
     }
 
     @Override
     public Vehicle findByLicensePlate(final String licensePlate) {
 
-        Vehicle vehicle = vehicleRepository.findByRegistrationLicensePlate(licensePlate);
+        Vehicle vehicle = repository.findByRegistrationLicensePlate(licensePlate);
+        return findVehicleOrThrowNotFoundException(vehicle, "Vehicle not found");
 
-        if (vehicle == null) {
-            throw new NotFoundException("Vehicle not found");
-        }
-
-        return vehicle;
     }
 
     @Override
-    public List<Vehicle> findByAttributes(final Map<String, String> params) {
+    public List<Vehicle> findByAttributes(final String color, final String type) {
 
-        Specification<Vehicle> spec = Specification.where(null);
+        List<Vehicle> vehicles;
 
-        String color = params.get("color");
-        String type = params.get("type");
+        if (color != null && type != null) {
+            vehicles = repository.findByColorAndType(color, type);
+            return findVehiclesOrThrowNoDataFoundException(vehicles, "No Vehicles found");
+        }
 
         if (color != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("color"), color));
+            vehicles = repository.findByColor(color);
+            return findVehiclesOrThrowNoDataFoundException(vehicles, "No Vehicles found");
         }
 
-        if (type != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("type"), type));
-        }
-
-        List<Vehicle> vehicles = vehicleRepository.findAll(spec);
-
-        if (vehicles.isEmpty()) {
-            throw new NoDataFoundException("No vehicles found");
-        }
-
-        return vehicles;
+        vehicles = repository.findByType(type);
+        return findVehiclesOrThrowNoDataFoundException(vehicles, "No Vehicles found");
 
     }
 
+    private Vehicle findVehicleOrThrowNotFoundException(Vehicle vehicle, final String message) {
+        if (vehicle == null) {
+            throw new NotFoundException(message);
+        }
+        return vehicle;
+    }
+
+    private List<Vehicle> findVehiclesOrThrowNoDataFoundException(List<Vehicle> vehicles, String message) {
+        if (vehicles == null || vehicles.isEmpty()) {
+            throw new NoDataFoundException(message);
+        }
+        return vehicles;
+    }
 }

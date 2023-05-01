@@ -28,28 +28,24 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull(message = "street is required")
-    @NotEmpty(message = "street must not be empty")
+    @NotEmpty(message = "{street.required}")
     @Column(nullable = false)
     private String street;
 
-    @NotNull(message = "number is required")
-    @Min(value = 1, message = "number must be after 0")
+    @NotNull(message = "{number.required}")
+    @Min(value = 1, message = "{numberMin.required}")
     @Column(nullable = false)
     private int number;
 
-    @NotNull(message = "neighborhood is required")
-    @NotEmpty(message = "neighborhood must not be empty")
+    @NotEmpty(message = "{neighborhood.required}")
     @Column(nullable = false)
     private String neighborhood;
 
-    @NotNull(message = "city is required")
-    @NotEmpty(message = "city must not be empty")
+    @NotEmpty(message = "{city.required}")
     @Column(nullable = false)
     private String city;
     
-    @NotNull(message = "state is required")
-    @NotEmpty(message = "state must not be empty")
+    @NotEmpty(message = "{state.required}")
     @Column(nullable = false)
     private String state;
 

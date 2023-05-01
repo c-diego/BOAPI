@@ -27,7 +27,7 @@ public class ReportController {
 
     @GetMapping
     public ResponseEntity<List<Report>> findAll() {
-        return ResponseEntity.ok().body(service.showAll());
+        return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping

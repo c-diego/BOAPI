@@ -11,7 +11,7 @@ public interface ReportService {
 
     Report findByIdentification(final String identification);
     
-    List<Report> showAll();
+    List<Report> findAll();
 
     List<Report> findByAttributes(final Map<String, String> params);
 

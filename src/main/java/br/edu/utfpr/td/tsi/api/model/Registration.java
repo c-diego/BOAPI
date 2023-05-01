@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -27,18 +26,15 @@ public class Registration {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @NotNull(message = "licensePlate is required")
-    @NotEmpty(message = "licensePlate must not be empty")
+    @NotEmpty(message = "{licensePlate.required}")
     @Column(unique = true, nullable = false)
     private String licensePlate;
 
-    @NotNull(message = "state is required")
-    @NotEmpty(message = "state must not be empty")
+    @NotEmpty(message = "{state.required}")
     @Column(nullable = false)
     private String state;
 
-    @NotNull(message = "city is required")
-    @NotEmpty(message = "city must not be empty")
+    @NotEmpty(message = "{city.required}")
     @Column(nullable = false)
     private String city;
 

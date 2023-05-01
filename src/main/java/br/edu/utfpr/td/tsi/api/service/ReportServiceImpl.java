@@ -29,7 +29,7 @@ public class ReportServiceImpl implements ReportService {
     private IAddressRepository addressRepository;
 
     @Override
-    public List<Report> showAll() throws NoDataFoundException {
+    public List<Report> findAll() throws NoDataFoundException {
 
         List<Report> reports = reportRepository.findAll();
 

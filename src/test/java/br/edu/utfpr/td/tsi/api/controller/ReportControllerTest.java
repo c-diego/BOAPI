@@ -61,13 +61,13 @@ public class ReportControllerTest {
     public void testFindReportNotFound() throws Exception {
 
         Mockito.when(service.findByIdentification("report-50"))
-                .thenThrow(new NotFoundException("Report not found"));
+                .thenThrow(new NotFoundException("Report no found"));
 
         mockMvc.perform(get("/reports/report-50")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.error").value("Report not found"));
+                .andExpect(jsonPath("$.error").value("Report no found"));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class ReportControllerTest {
 
     @Test
     public void testFindAllReportFound() throws Exception {
-        Mockito.when(service.showAll())
+        Mockito.when(service.findAll())
                 .thenReturn(reports);
 
         mockMvc.perform(get("/reports")
@@ -96,7 +96,7 @@ public class ReportControllerTest {
 
     @Test
     public void testFindAllReportNotFound() throws Exception {
-        Mockito.when(service.showAll())
+        Mockito.when(service.findAll())
                 .thenThrow(new NoDataFoundException("No reports found"));
 
         mockMvc.perform(get("/reports")
@@ -139,8 +139,8 @@ public class ReportControllerTest {
                 .content(objectMapper.writeValueAsString(report)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.dateOccurrence").value("dateOccurence is required"))
-                .andExpect(jsonPath("$.period").value("period is required"))
+                .andExpect(jsonPath("$.dateOccurrence").value("dateOccurrence is required and must not be empty"))
+                .andExpect(jsonPath("$.period").value("period is required and must not be empty"))
                 .andExpect(jsonPath("$.address").value("address is required"))
                 .andExpect(jsonPath("$.vehicle").value("vehicle is required"));
     }
@@ -164,14 +164,14 @@ public class ReportControllerTest {
     @Test
     public void testUpdateReportUnsuccessfully() throws Exception {
         Report report = reports.get(1);
-        report.setPeriod(null);
 
         mockMvc.perform(put("/reports/report-2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(report)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.period").value("period is required"));
+                .andExpect(jsonPath("$.address").value("address is required"))
+                .andExpect(jsonPath("$.vehicle").value("vehicle is required"));
     }
 
     private Report createValidReportWhitoutId() {
@@ -179,7 +179,7 @@ public class ReportControllerTest {
         Report report = Report.build(null, "04/04/2023", "MADRUGADA", null, null);
         Address address = Address.build(1l, "RUA 10", 10, "SÃO JOSÉ", "SÃO PAULO", "SÃO PAULO", null);
         Registration registration = Registration.build(1l, "ABC1D23", "SÃO PAULO", "SÃO PAULO", null);
-        Vehicle vehicle = Vehicle.build(1l, 0, "BLACK", "FIAT", "CARRO", "UNO", registration, null);
+        Vehicle vehicle = Vehicle.build(1l, 2013, "BLACK", "FIAT", "CARRO", "UNO", registration, null);
 
         vehicle.setRegistration(registration);
         report.setVehicle(vehicle);
